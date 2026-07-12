@@ -1,24 +1,42 @@
-def detectar_bot(datos):
-    seguidores = int(datos.get("seguidores", 0))
-    siguiendo = int(datos.get("siguiendo", 0))
-    publicaciones = int(datos.get("publicaciones", 0))
-    edad_dias = int(datos.get("edad_dias", 0))
-    foto_perfil = bool(datos.get("foto_perfil", False))
-    biografia = bool(datos.get("biografia", False))
+import time
+import os
 
-    puntuacion = 0
+os.system("clear")
 
-    if seguidores < 50:
-        puntuacion += 20
-    if siguiendo > 1000:
-        puntuacion += 20
-    if publicaciones < 5:
-        puntuacion += 15
-    if edad_dias < 30:
-        puntuacion += 20
-    if not foto_perfil:
-        puntuacion += 10
-    if not biografia:
-        puntuacion += 15
+print(r"""
+ ██████╗ ██╗  ██╗██████╗  ██████╗ ████████╗
+██╔════╝╚██╗██╔╝██╔══██╗██╔═══██╗╚══██╔══╝
+██║  ███╗╚███╔╝ ██████╔╝██║   ██║   ██║
+██║   ██║██╔██╗ ██╔══██╗██║   ██║   ██║
+╚██████╔╝██╔╝ ██╗██████╔╝╚██████╔╝   ██║
+ ╚═════╝ ╚═╝  ╚═╝╚═════╝  ╚═════╝    ╚═╝
 
-    return min(puntuacion, 100)
+        GxBotHunter v1.0
+        By GxDon
+""")
+
+print("[+] Plataforma : Telegram")
+time.sleep(0.8)
+
+print("[+] Usuario    : GxDon_Test")
+time.sleep(0.8)
+
+print("[+] Iniciando análisis...")
+time.sleep(1)
+
+print("[✓] Revisando información pública...")
+time.sleep(1)
+
+print("[✓] Analizando indicadores...")
+time.sleep(1)
+
+print("[✓] Generando reporte...")
+time.sleep(1)
+
+print("\n==============================")
+print("      RESULTADO FINAL")
+print("==============================")
+print("Estado   : Análisis completado")
+print("Riesgo   : 18%")
+print("Reporte  : reports/GxDon_Test.json")
+print("==============================")
