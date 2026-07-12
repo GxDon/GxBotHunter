@@ -1,0 +1,24 @@
+def detectar_bot(datos):
+    seguidores = int(datos.get("seguidores", 0))
+    siguiendo = int(datos.get("siguiendo", 0))
+    publicaciones = int(datos.get("publicaciones", 0))
+    edad_dias = int(datos.get("edad_dias", 0))
+    foto_perfil = bool(datos.get("foto_perfil", False))
+    biografia = bool(datos.get("biografia", False))
+
+    puntuacion = 0
+
+    if seguidores < 50:
+        puntuacion += 20
+    if siguiendo > 1000:
+        puntuacion += 20
+    if publicaciones < 5:
+        puntuacion += 15
+    if edad_dias < 30:
+        puntuacion += 20
+    if not foto_perfil:
+        puntuacion += 10
+    if not biografia:
+        puntuacion += 15
+
+    return min(puntuacion, 100)
