@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+
+import argparse
+import collections
+import json
+import re
+
+BOT_KEYWORDS = (
+    "bot",
+    "crawler",
+    "spider",
+    "scanner",
+    "curl",
+    "wget",
+    "python-requests",
+)
+
+LOG_RE = re.compile(
+    r'(?P<ip>\S+).*?'
+    r'"[^"]*"\s+\d+\s+\S+.*?'
+    r'"[^"]*"\s+"(?P<ua>[^"]*)"'
+)
+
+
+def main():
+    parser = argparse.ArgumentParser(description="GxBotHunter")
+    parser.add_argument("logfile")
+    parser.add_argument("-o", "--output", default="gxbothunter_report.json")
+    args = parser.parse_args()
+
+    ips = collections.Counter()
+    user_agents = collections.Counter()
+    possible_bots = []
+
+    try:
+        with open(args.logfile, "r", encoding="utf-8", errors="ignore") as f:
+            for line in f:
+                match = LOG_RE.search(line)
+
+                if not match:
+                    continue
+
+                ip = match.group("ip")
+                user_agent = match.group("ua")
+
+                ips[ip] += 1
+                user_agents[user_agent] += 1
+
+                if any(
+                    keyword in user_agent.lower()
+                    for keyword in BOT_KEYWORDS
+                ):
+                    possible_bots.append({
+                        "ip": ip,
+                        "user_agent": user_agent,
+                    })
+
+    except OSError as error:
+        raise SystemExit(f"[!] No se pudo leer el log: {error}")
+
+    report = {
+        "tool": "GxBotHunter",
+        "top_ips": ips.most_common(10),
+        "top_user_agents": user_agents.most_common(10),
+        "possible_bots": possible_bots,
+    }
+
+    try:
+        with open(args.output, "w", encoding="utf-8") as f:
+            json.dump(report, f, indent=2, ensure_ascii=False)
+    except OSError as error:
+        raise SystemExit(f"[!] No se pudo escribir el reporte: {error}")
+
+    print(f"[+] Posibles bots: {len(possible_bots)}")
+    print(f"[+] Reporte: {args.output}")
+
+
+if name == "main":
+    main()
